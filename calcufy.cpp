@@ -9,6 +9,7 @@
 #include <vector>
 #include <cstdlib>
 #include <cstdio>
+#include <fstream>
 #include "functions.cpp"
 
 #define MAX_STORED_CALCULATIONS 20
@@ -17,16 +18,20 @@ struct operation {
 
     int end_number = 0;
     std::string list_of_inputs = ""; 
-    std::string comment = "";
     bool is_this_first_command_in_section = true;
 
     void erase_all () {
 
         end_number = 0;
         list_of_inputs = "";
-        comment = "";
         is_this_first_command_in_section = true;
     }
+};
+
+struct calculation {
+
+    std::vector <operation> previous;
+    int end_number;
 };
 
 std::string exec(const char* cmd) {
@@ -76,10 +81,64 @@ void show_help () {
     //showing help
 }
 
+bool process_and_put_the_next_operation ( char * operation_to_be_put_in, std::vector <operation> &previous ) {
+
+    char korektor[] = ",";
+
+    char * schowek;
+    
+    schowek = strtok( operation_to_be_put_in, korektor );
+
+    int timer = 0;
+
+    while( schowek != NULL )
+    {
+        
+        switch ( timer ) {
+
+            case 0:
+
+        }
+
+        schowek = strtok( NULL, korektor );
+    }
+}
+
+bool process_the_file_content_and_add_previous_operations ( std::vector <operation> &previous, char * file_inside ) {
+
+    char korektor[] = ";";
+
+    char * schowek;
+    
+    schowek = strtok( file_inside, korektor );
+
+    while( schowek != NULL )
+    {
+        if ( !process_and_put_the_next_operation ( schowek, previous ) ) {
+
+            previous.clear();
+
+            return false;
+        }
+        
+        schowek = strtok( NULL, korektor );
+    }
+}
+
 void prepare_for_typing ( std::vector <operation> &previous ) {
 
-    //loading previous calculations
-    //showing calculations
+    char file_inside [ 10000 ];
+
+    std::ifstream fil ( "prev" );
+
+    fil.getline ( file_inside, 10000 );
+
+    fil.close();
+
+    if ( !process_the_file_content_and_add_previous_operations ( previous, file_inside ) ) {
+
+        printf ( "# Error While Loading Previous Operations\n" );
+    }
 }
 
 bool if_exit ( std::string &input ) {
