@@ -97,7 +97,7 @@ bool process_and_put_the_next_operation ( char * operation_to_be_put_in, std::ve
         switch ( timer ) {
 
             case 0:
-
+            
         }
 
         schowek = strtok( NULL, korektor );
